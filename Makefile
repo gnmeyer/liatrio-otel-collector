@@ -96,7 +96,7 @@ multimod-verify:
 
 .PHONY: multimod-prerelease
 multimod-prerelease:
-	$(MULTIMOD) prerelease -s=true -v ./versions.yaml -m liatrio-otel
+	$(MULTIMOD) prerelease -s=true -b=false -v ./versions.yaml -m liatrio-otel
 
 
 .PHONY: crosslink
