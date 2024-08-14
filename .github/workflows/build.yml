@@ -50,21 +50,12 @@
           id: auto-commit-action
           uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
           with:
-            commit_message: 'chore: udpate versions with multi mod'
+            commit_message: 'chore: update versions with multi mod'
+
+        - name: Set Git user to the commit author #This is so multimod prerelease can get author info
+          run: |
+            git config --global user.name "${{ github.event.head_commit.committer.name }}"
+            git config --global user.email "${{ github.event.head_commit.committer.email }}"
+          
         - name: Multimod prerelease
           run: make multimod-prerelease
-        - name: Generate a token
-          id: generate_token
-          uses: actions/create-github-app-token@v1
-          with:
-            app_id: ${{ secrets.APP_ID }}
-            private_key: ${{ secrets.APP_PRIVATE_KEY }}
-            owner: ${{ github.repository_owner }}
-  
-        - name: Run go-semantic-release
-          uses: go-semantic-release/action@v1
-          with:
-            github-token: ${{ steps.generate_token.outputs.token }}
-            changelog-generator-opt: emojis=true
-            allow-initial-development-versions: true
-  
