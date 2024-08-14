@@ -46,16 +46,24 @@
           run: |
             new_version=${{ steps.get_next_version.outputs.version }}
             sed -i "s/version: .*/version: ${new_version}/" versions.yaml
-        - name: Auto commit
-          id: auto-commit-action
-          uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
-          with:
-            commit_message: 'chore: update versions with multi mod'
 
         - name: Set Git user to the commit author #This is so multimod prerelease can get author info
           run: |
             git config --global user.name "${{ github.event.head_commit.committer.name }}"
             git config --global user.email "${{ github.event.head_commit.committer.email }}"
+
+        - name: Stage changes
+          run: git add .
+      
+        - name: Commit changes
+          run: |
+            git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})"
           
         - name: Multimod prerelease
           run: make multimod-prerelease
+        
+        - name: Auto commit
+          id: auto-commit-action
+          uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
+          with:
+            commit_message: 'chore: update versions with multi mod (${{ steps.get_next_version.outputs.version }})'
