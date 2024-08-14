@@ -24,7 +24,7 @@
     go-semantic-release:
       if: ${{ github.ref == 'refs/heads/main' }}
       runs-on:
-        group: bigger
+        ubuntu-latest
       permissions:
         contents: write
       steps:
