@@ -90,7 +90,7 @@ checks: install-tools
 		echo "completed successfully."; \
 	fi
 
-.PHONY: multimod-verify
+.PHONY: multimod-verifytestsetse
 multimod-verify:
 	$(MULTIMOD) verify
 
