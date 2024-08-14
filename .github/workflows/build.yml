@@ -62,8 +62,14 @@
         - name: Multimod prerelease
           run: make multimod-prerelease
         
-        - name: Push changes
-          run: git push origin main
-          env:
-            # This is required to push changes back to the repository
-            GITHUB_TOKEN: ${{ secrets.APP_GITHUB_TOKEN }}
+        # - name: Push changes
+        #   run: git push origin main
+        #   env:
+        #     # This is required to push changes back to the repository
+        #     GITHUB_TOKEN: ${{ secrets.APP_GITHUB_TOKEN }}
+        - name: Auto commit
+          uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
+          id: auto-commit-action
+          with:
+            skip_dirty_check: true    
+            commit_message: 'chore: udpate versions with multi mod'
