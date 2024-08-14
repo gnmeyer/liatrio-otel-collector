@@ -13,3 +13,6 @@ module-sets:
 excluded-modules:
   - github.com/liatrio/liatrio-otel-collector/internal/tools
   - github.com/liatrio/compgen
+
+
+
