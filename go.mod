@@ -5,8 +5,8 @@ go 1.22
 toolchain go1.22.2
 
 require (
-	github.com/liatrio/liatrio-otel-collector/extension/githubappauthextension v0.65.0
-	github.com/liatrio/liatrio-otel-collector/receiver/gitproviderreceiver v0.65.0
+	github.com/liatrio/liatrio-otel-collector/extension/githubappauthextension v0.65.1
+	github.com/liatrio/liatrio-otel-collector/receiver/gitproviderreceiver v0.65.1
 )
 
 require (
