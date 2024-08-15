@@ -4,22 +4,11 @@
 
 module-sets:
   liatrio-otel:
-    version: v0.66.7
+    version: v213
     modules:
       - github.com/liatrio/liatrio-otel-collector
       - github.com/liatrio/liatrio-otel-collector/receiver/gitproviderreceiver
       - github.com/liatrio/liatrio-otel-collector/extension/githubappauthextension
-
 excluded-modules:
   - github.com/liatrio/liatrio-otel-collector/internal/tools
   - github.com/liatrio/compgen
-
-
-
-
-
-
-
-
-
-
