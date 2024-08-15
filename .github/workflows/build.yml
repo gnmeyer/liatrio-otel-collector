@@ -61,6 +61,8 @@
         - name: Stage changes
           run: git add .
       
+
+          
         - name: Commit changes
           id: commit_step  # Adding an ID to reference this step later
           run: |
