@@ -17,6 +17,8 @@
         - .golangci.yaml
         - .goreleaser.yaml
   
+
+        
     push:
       branches: [main]
   
