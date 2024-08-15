@@ -4,7 +4,7 @@
 
 module-sets:
   liatrio-otel:
-    version: v213
+    version: v0.67.0
     modules:
       - github.com/liatrio/liatrio-otel-collector
       - github.com/liatrio/liatrio-otel-collector/receiver/gitproviderreceiver
