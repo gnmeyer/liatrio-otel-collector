@@ -44,7 +44,7 @@
             echo ${{ steps.get_next_version.outputs.version }}
             echo ${{ steps.get_next_version.outputs.hasNextVersion }}
         - name: Update VERSION file
-          if: steps.get_next_version.outputs.hasNextVersion == 'true'
+          if: steps.get_next_version.outputs.hasNextVersion
           run: |
             yq -i '.module-sets.liatrio-otel.version = "${{ steps.get_next_version.outputs.version }}"' versions.yaml
         - name: Set Git user to the commit author #This is so multimod prerelease can get author info
