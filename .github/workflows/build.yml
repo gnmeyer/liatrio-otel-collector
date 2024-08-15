@@ -31,6 +31,8 @@
           with:
             fetch-depth: 0
             ref: ${{ github.event.pull_request.head.sha }}
+        - name: Install tools
+          run: make install-tools
         - name: Get next version
           id: get_next_version
           uses: thenativeweb/get-next-version@f9202b1ab94b345e7ca86da624762a5e17d4cd3e # v2.6.2
@@ -40,8 +42,6 @@
           run: |
             echo ${{ steps.get_next_version.outputs.version }}
             echo ${{ steps.get_next_version.outputs.hasNextVersion }}
-        - name: Install tools
-          run: make install-tools
         - name: Update VERSION file
           run: |
             new_version=${{ steps.get_next_version.outputs.version }}
