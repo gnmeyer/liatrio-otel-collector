@@ -50,19 +50,12 @@
           run: |
             new_version=${{ steps.get_next_version.outputs.version }}
             sed -i "s/version: .*/version: ${new_version}/" versions.yaml
-
-
-
         - name: Set Git user to the commit author #This is so multimod prerelease can get author info
           run: |
             git config --global user.name "${{ github.event.head_commit.committer.name }}"
             git config --global user.email "${{ github.event.head_commit.committer.email }}"
-
         - name: Stage changes
           run: git add .
-      
-
-          
         - name: Commit changes
           id: commit_step  # Adding an ID to reference this step later
           run: |
