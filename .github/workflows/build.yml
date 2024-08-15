@@ -16,8 +16,6 @@
         - '**/documentation.md'
         - .golangci.yaml
         - .goreleaser.yaml
-  
-
     push:
       branches: [main]
   jobs:
