@@ -60,19 +60,16 @@
         - name: Commit changes
           id: commit_step  # Adding an ID to reference this step later
           run: |
-            git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})" || echo "Nothing to commit"
-            echo "::set-output name=commit::$(if git rev-parse --verify HEAD >/dev/null 2>&1; then echo success; else echo failure; fi)"
+            git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})"
           continue-on-error: true  # This allows the workflow to continue even if the commit command fails
 
 
 
-          
+
         - name: Multimod prerelease
-          if: steps.commit_step.outputs.commit == 'success' 
           run: make multimod-prerelease
         
         - name: Push changes
-          if: steps.commit_step.outputs.commit == 'success'
           run: git push origin main
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
