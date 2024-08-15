@@ -58,7 +58,6 @@
           continue-on-error: true  # This allows the workflow to continue even if the commit command fails
         - name: Multimod prerelease
           run: make multimod-prerelease
-        
         - name: Push changes
           run: git push origin main
           env:
