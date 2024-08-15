@@ -17,13 +17,6 @@
         - .golangci.yaml
         - .goreleaser.yaml
   
-
-
-
-
-        
-
-
     push:
       branches: [main]
   
@@ -63,16 +56,20 @@
           run: git add .
       
         - name: Commit changes
+          id: commit_step  # Adding an ID to reference this step later
           run: |
-            git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})"
-          
+            git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})" || echo "Nothing to commit"
+            
         - name: Multimod prerelease
+          if: success() && steps.commit_step.outputs.commit != ''  
           run: make multimod-prerelease
         
         - name: Push changes
+          if: success() && steps.commit_step.outputs.commit != ''
           run: git push origin main
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
 
 
 
