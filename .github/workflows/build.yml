@@ -76,7 +76,7 @@
             - GOOS: windows
               GOARCH: arm64
       runs-on:
-        group: bigger
+        group: ubuntu-latest
       steps:
         - name: Check out code
           uses: actions/checkout@v4
@@ -204,4 +204,3 @@
             allow-initial-development-versions: true
   
 
-            
