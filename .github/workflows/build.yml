@@ -48,7 +48,7 @@
             sed -i "s/version: .*/version: ${new_version}/" versions.yaml
 
 
-            
+
         - name: Set Git user to the commit author #This is so multimod prerelease can get author info
           run: |
             git config --global user.name "${{ github.event.head_commit.committer.name }}"
@@ -63,11 +63,11 @@
             git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})" || echo "Nothing to commit"
             
         - name: Multimod prerelease
-          if: success() && steps.commit_step.outputs.commit != ''  
+          if: steps.commit_step.outputs.commit != ''  
           run: make multimod-prerelease
         
         - name: Push changes
-          if: success() && steps.commit_step.outputs.commit != ''
+          if: steps.commit_step.outputs.commit != ''
           run: git push origin main
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
