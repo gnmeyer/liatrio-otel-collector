@@ -29,9 +29,10 @@
         contents: write
       steps:
         - name: Clone repository
-          uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+          uses: actions/checkout@v3
           with:
             fetch-depth: 0
+            ref: ${{ github.event.pull_request.head.sha }}
         - name: Get next version
           id: get_next_version
           uses: thenativeweb/get-next-version@f9202b1ab94b345e7ca86da624762a5e17d4cd3e # v2.6.2
@@ -73,7 +74,7 @@
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
 
-            
+
 
 
 
