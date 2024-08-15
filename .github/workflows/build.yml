@@ -64,6 +64,9 @@
             echo "::set-output name=commit::$(if git rev-parse --verify HEAD >/dev/null 2>&1; then echo success; else echo failure; fi)"
           continue-on-error: true  # This allows the workflow to continue even if the commit command fails
 
+
+
+          
         - name: Multimod prerelease
           if: steps.commit_step.outputs.commit == 'success' 
           run: make multimod-prerelease
