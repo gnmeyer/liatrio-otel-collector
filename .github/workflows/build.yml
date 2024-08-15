@@ -41,6 +41,7 @@
         - name: Show the next version
           run: |
             echo ${{ steps.get_next_version.outputs.version }}
+            echo ${{ steps.get_next_version.outputs.hasNextVersion }}
         - name: Install tools
           run: make install-tools
         - name: Update VERSION file
