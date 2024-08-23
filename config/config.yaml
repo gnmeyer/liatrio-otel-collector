@@ -10,17 +10,17 @@ extensions:
 
   bearertokenauth/github:
     token: ${env:GH_PAT}
+#fix: fake fix 3
+## Uncomment below if you want to enable authentication to GitLab
+## Presume that GL_PAT is set as env variables.
+# basicauth/gitlab:
+#     token: ${env:GL_PAT}
 
-  ## Uncomment below if you want to enable authentication to GitLab
-  ## Presume that GL_PAT is set as env variables.
-  # basicauth/gitlab:
-  #     token: ${env:GL_PAT}
-
-  ## Uncomment below if you want to enable authentication to Grafana
-  # basicauth/grafana:
-  #     client_auth:
-  #         username: ${env:GRAF_USER}
-  #         password: ${env:GRAF_PAT}
+## Uncomment below if you want to enable authentication to Grafana
+# basicauth/grafana:
+#     client_auth:
+#         username: ${env:GRAF_USER}
+#         password: ${env:GRAF_PAT}
 
 receivers:
   otlp:
@@ -51,7 +51,7 @@ receivers:
         ## You can specify a custom endpoint URL full list of client settings: https://github.com/open-telemetry/opentelemetry-collector/tree/main/config/confighttp#client-configuration
         #endpoint: "https://mygitlabenterprise.com"
         auth:
-            authenticator: bearertokenauth/github
+          authenticator: bearertokenauth/github
 
 processors:
   batch:
