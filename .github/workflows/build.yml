@@ -32,41 +32,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Install tools
         run: make install-tools
-      - name: Get next version
-        id: get_next_version
-        uses: thenativeweb/get-next-version@f9202b1ab94b345e7ca86da624762a5e17d4cd3e # v2.6.2
-        with:
-          prefix: v # optional, defaults to ''
-      - name: Show the next version
-        run: |
-          echo ${{ steps.get_next_version.outputs.version }}
-          echo ${{ steps.get_next_version.outputs.hasNextVersion }}
-      - name: Update VERSION file
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: |
-          yq -i '.module-sets.liatrio-otel.version = "${{ steps.get_next_version.outputs.version }}"' versions.yaml
-      - name: Set Git user to the commit author #This is so multimod prerelease can get author info
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: |
-          git config --global user.name "${{ github.event.head_commit.committer.name }}"
-          git config --global user.email "${{ github.event.head_commit.committer.email }}"
-      - name: Stage changes
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: git add .
-      - name: Commit changes
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: |
-          git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})"
-      - name: Multimod prerelease #Only run this step if the commit was successful
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: make multimod-prerelease
-      - name: Push changes
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: git push origin main
-        env: #fake fix 2
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Get changelog
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
         id: get_tag
         uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b # v6.2
         with:
@@ -74,6 +40,33 @@ jobs:
           custom_release_rules: "BREAKING:major:Breaking Changes"
           dry_run: true
           default_bump: false
+      - name: Show the next version
+        run: |
+          echo ${{ steps.get_tag.outputs.new_tag }}
+      - name: Update VERSION file
+        if: steps.get_tag.outputs.new_tag
+        run: |
+          yq -i '.module-sets.liatrio-otel.version = "${{  steps.get_tag.outputs.new_tag }}"' versions.yaml
+      - name: Set Git user to the commit author #This is so multimod prerelease can get author info
+        if: steps.get_tag.outputs.new_tag
+        run: |
+          git config --global user.name "${{ github.event.head_commit.committer.name }}"
+          git config --global user.email "${{ github.event.head_commit.committer.email }}"
+      - name: Stage changes
+        if: steps.get_tag.outputs.new_tag
+        run: git add .
+      - name: Commit changes
+        if: steps.get_tag.outputs.new_tag
+        run: |
+          git commit -m "Automated commit: prepare for multimod (version ${{  steps.get_tag.outputs.new_tag }})"
+      - name: Multimod prerelease #Only run this step if the commit was successful
+        if: steps.get_tag.outputs.new_tag
+        run: make multimod-prerelease
+      - name: Push changes
+        if: steps.get_tag.outputs.new_tag != ''
+        run: git push origin main
+        env: #fake fix 2
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create GitHub Release
         if: steps.get_tag.outputs.new_tag != ''
         env:
@@ -85,4 +78,6 @@ jobs:
           --target "$(git rev-parse HEAD)"
 
 #test
+
+#chore
 #fix 1
