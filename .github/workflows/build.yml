@@ -17,7 +17,7 @@ on:
       - .goreleaser.yaml
   push:
     branches: [main]
-#feat
+
 jobs:
   go-semantic-release:
     if: ${{ github.ref == 'refs/heads/main' }}
