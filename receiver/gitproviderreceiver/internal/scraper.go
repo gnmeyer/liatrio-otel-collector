@@ -10,6 +10,7 @@ import (
 	"go.opentelemetry.io/collector/receiver/scraperhelper"
 )
 
+// fake fix 2
 type ScraperFactory interface {
 	// Create the default configuration for the sub sccraper.
 	CreateDefaultConfig() Config
