@@ -1,71 +1,67 @@
 ---
-  name: Build and Test
-  on:
-    pull_request:
-      branches: [main]
-      paths:
-        - '**/Dockerfile'
-        - '**/.dockerignore'
-        - .github/**
-        - '**.go'
-        - '**.mod'
-        - '**.sum'
-        - config/**
-        - '**/Makefile*'
-        - '**/documentation.md'
-        - .golangci.yaml
-        - .goreleaser.yaml
-    push:
-      branches: [main]
+name: Build and Test
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/Dockerfile"
+      - "**/.dockerignore"
+      - .github/**
+      - "**.go"
+      - "**.mod"
+      - "**.sum"
+      - config/**
+      - "**/Makefile*"
+      - "**/documentation.md"
+      - .golangci.yaml
+      - .goreleaser.yaml
+  push:
+    branches: [main]
 
-
-  jobs:
-    go-semantic-release:
-      if: ${{ github.ref == 'refs/heads/main' }}
-      runs-on:
-        ubuntu-latest
-      permissions:
-        contents: write
-      steps:
-        - name: Clone repository
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-            ref: ${{ github.event.pull_request.head.sha }}
-        - name: Install tools
-          run: make install-tools
-        - name: Get next version
-          id: get_next_version
-          uses: thenativeweb/get-next-version@f9202b1ab94b345e7ca86da624762a5e17d4cd3e # v2.6.2
-          with:
-            prefix: v   # optional, defaults to ''
-        - name: Show the next version
-          run: |
-            echo ${{ steps.get_next_version.outputs.version }}
-            echo ${{ steps.get_next_version.outputs.hasNextVersion }}
-        - name: Update VERSION file
-          if: steps.get_next_version.outputs.hasNextVersion
-          run: |
-            yq -i '.module-sets.liatrio-otel.version = "${{ steps.get_next_version.outputs.version }}"' versions.yaml
-        - name: Set Git user to the commit author #This is so multimod prerelease can get author info
-          if: steps.get_next_version.outputs.hasNextVersion == 'true'
-          run: |
-            git config --global user.name "${{ github.event.head_commit.committer.name }}"
-            git config --global user.email "${{ github.event.head_commit.committer.email }}"
-        - name: Stage changes
-          if: steps.get_next_version.outputs.hasNextVersion == 'true'
-          run: git add .
-        - name: Commit changes
-          if: steps.get_next_version.outputs.hasNextVersion == 'true'
-          run: |
-            git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})"
-        - name: Multimod prerelease #Only run this step if the commit was successful
-          if: steps.get_next_version.outputs.hasNextVersion == 'true'
-          run: make multimod-prerelease
-        - name: Push changes
-          if: steps.get_next_version.outputs.hasNextVersion == 'true'
-          run: git push origin main
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            
+jobs:
+  go-semantic-release:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install tools
+        run: make install-tools
+      - name: Get next version
+        id: get_next_version
+        uses: thenativeweb/get-next-version@f9202b1ab94b345e7ca86da624762a5e17d4cd3e # v2.6.2
+        with:
+          prefix: v # optional, defaults to ''
+      - name: Show the next version
+        run: |
+          echo ${{ steps.get_next_version.outputs.version }}
+          echo ${{ steps.get_next_version.outputs.hasNextVersion }}
+      - name: Update VERSION file
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: |
+          yq -i '.module-sets.liatrio-otel.version = "${{ steps.get_next_version.outputs.version }}"' versions.yaml
+      - name: Set Git user to the commit author #This is so multimod prerelease can get author info
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: |
+          git config --global user.name "${{ github.event.head_commit.committer.name }}"
+          git config --global user.email "${{ github.event.head_commit.committer.email }}"
+      - name: Stage changes
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: git add .
+      - name: Commit changes
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: |
+          git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})"
+      - name: Multimod prerelease #Only run this step if the commit was successful
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: make multimod-prerelease
+      - name: Push changes
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
