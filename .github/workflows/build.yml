@@ -57,6 +57,14 @@ jobs:
         if: steps.get_next_version.outputs.hasNextVersion == 'true'
         run: |
           git commit -m "Automated commit: prepare for multimod (version ${{ steps.get_next_version.outputs.version }})"
+      - name: Multimod prerelease #Only run this step if the commit was successful
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: make multimod-prerelease
+      - name: Push changes
+        if: steps.get_next_version.outputs.hasNextVersion == 'true'
+        run: git push origin main
+        env: #fake fix 2
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Get changelog
         if: steps.get_next_version.outputs.hasNextVersion == 'true'
         id: get_tag
@@ -66,14 +74,6 @@ jobs:
           custom_release_rules: "BREAKING:major:Breaking Changes"
           dry_run: true
           default_bump: false
-      - name: Multimod prerelease #Only run this step if the commit was successful
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: make multimod-prerelease
-      - name: Push changes
-        if: steps.get_next_version.outputs.hasNextVersion == 'true'
-        run: git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create GitHub Release
         if: steps.get_tag.outputs.new_tag != ''
         env:
