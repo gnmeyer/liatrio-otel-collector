@@ -43,30 +43,30 @@ jobs:
       - name: Show the next version
         run: |
           echo ${{ steps.get_tag.outputs.new_tag }}
-      - name: Update VERSION file
-        if: steps.get_tag.outputs.new_tag
-        run: |
-          yq -i '.module-sets.liatrio-otel.version = "${{  steps.get_tag.outputs.new_tag }}"' versions.yaml
-      - name: Set Git user to the commit author #This is so multimod prerelease can get author info
-        if: steps.get_tag.outputs.new_tag
-        run: |
-          git config --global user.name "${{ github.event.head_commit.committer.name }}"
-          git config --global user.email "${{ github.event.head_commit.committer.email }}"
-      - name: Stage changes
-        if: steps.get_tag.outputs.new_tag
-        run: git add .
-      - name: Commit changes
-        if: steps.get_tag.outputs.new_tag
-        run: |
-          git commit -m "Automated commit: prepare for multimod (version ${{  steps.get_tag.outputs.new_tag }})"
-      - name: Multimod prerelease #Only run this step if the commit was successful
-        if: steps.get_tag.outputs.new_tag
-        run: make multimod-prerelease
-      - name: Push changes
-        if: steps.get_tag.outputs.new_tag != ''
-        run: git push origin main
-        env: #fake fix 2
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Update VERSION file
+      #   if: steps.get_tag.outputs.new_tag
+      #   run: |
+      #     yq -i '.module-sets.liatrio-otel.version = "${{  steps.get_tag.outputs.new_tag }}"' versions.yaml
+      # - name: Set Git user to the commit author #This is so multimod prerelease can get author info
+      #   if: steps.get_tag.outputs.new_tag
+      #   run: |
+      #     git config --global user.name "${{ github.event.head_commit.committer.name }}"
+      #     git config --global user.email "${{ github.event.head_commit.committer.email }}"
+      # - name: Stage changes
+      #   if: steps.get_tag.outputs.new_tag
+      #   run: git add .
+      # - name: Commit changes
+      #   if: steps.get_tag.outputs.new_tag
+      #   run: |
+      #     git commit -m "Automated commit: prepare for multimod (version ${{  steps.get_tag.outputs.new_tag }})"
+      # - name: Multimod prerelease #Only run this step if the commit was successful
+      #   if: steps.get_tag.outputs.new_tag
+      #   run: make multimod-prerelease
+      # - name: Push changes
+      #   if: steps.get_tag.outputs.new_tag != ''
+      #   run: git push origin main
+      #   env: #fake fix 2
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create GitHub Release
         if: steps.get_tag.outputs.new_tag != ''
         env:
