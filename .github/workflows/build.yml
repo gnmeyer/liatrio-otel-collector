@@ -39,7 +39,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_release_rules: "chore:patch:🧹 Chores,fix:patch:🐛 Bug Fixes,feat:minor:✨ Features"
           dry_run: true
-          default_bump: false #asdassadasdsadssdasd
+          default_bump: false #asdassadasdsadssdasdasda
       - name: Show the next version
         run: |
           echo ${{ steps.get_tag.outputs.new_tag }}
