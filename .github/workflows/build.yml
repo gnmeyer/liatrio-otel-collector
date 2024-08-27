@@ -37,7 +37,7 @@ jobs:
         uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b # v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          #custom_release_rules: "BREAKING:major:Breaking Changes"
+          custom_release_rules: "chore:chore:Chores"
           dry_run: true
           default_bump: false
       - name: Show the next version
