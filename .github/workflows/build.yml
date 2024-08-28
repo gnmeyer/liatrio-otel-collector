@@ -44,7 +44,7 @@ jobs:
         run: |
           echo ${{ steps.get_tag.outputs.new_tag }}
 
-      # - name: Update VERSION file
+      # - name: Update VERSION filesadasdasd
       #   if: steps.get_tag.outputs.new_tag
       #   run: |
       #     yq -i '.module-sets.liatrio-otel.version = "${{  steps.get_tag.outputs.new_tag }}"' versions.yaml
